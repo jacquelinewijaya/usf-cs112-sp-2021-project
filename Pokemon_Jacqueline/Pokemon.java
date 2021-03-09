@@ -1,5 +1,8 @@
 package inheritanceclass;
 
+//Maleke H. Cloned Repository
+
+
 public class Pokemon implements Comparable<Pokemon> {
 	private int age;
 	private String name;
