@@ -5,6 +5,9 @@ import java.util.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
+import javax.swing.*;
+import java.awt.*;
+import java.io.*;
 import java.util.Random;
 import java.lang.Math;
 
@@ -20,7 +23,6 @@ public class KNNPredictor extends Predictor {
 	}
 	
 	public KNNPredictor() {
-		
 	}
 	
 	public ArrayList readData(String filename) {
@@ -47,7 +49,7 @@ public class KNNPredictor extends Predictor {
 			String stringFare = data.next();
 			
 			
-			if (!stringFare.equals("") && !stringAge.equals("")) { //if age is a number
+			if (!stringFare.equals("") && !stringAge.equals("")) { //if age and fare are valid numbers
 				double age = d.getF1();
 				age = Double.parseDouble(stringAge);
 				double fare = d.getF2();
@@ -78,17 +80,17 @@ public class KNNPredictor extends Predictor {
 		}
 		System.out.println("training set survived passengers: " + survivedPassengers);
 		System.out.println("training set passengers who died: " + diedPassengers);
-		System.out.println("people assigned to test " + testentry);
-		System.out.println("people assigned to train " + trainentry);
+		System.out.println("people assigned to test: " + testentry);
+		System.out.println("people assigned to train: " + trainentry);
 		
 		return dataPoint; //return arraylist
 	}
 	
 	private double getDistance(DataPoint p1, DataPoint p2) {
 		double x1 = p1.f1;
-		double x2 = p1.f2;
+		double y1 = p1.f2;
 		
-		double y1 = p2.f1;
+		double x2 = p2.f1;
 		double y2 = p2.f2;
 		
 		return Math.sqrt(((x2-x1) * (x2-x1)) + ((y2-y1) * (y2-y1)));
@@ -96,7 +98,7 @@ public class KNNPredictor extends Predictor {
 	}
 	public String test(DataPoint data) {
 		double distance;
-		int k = 5;
+		int k = 3;
 		int survived = 0;
 		int died = 0;
 		int count = 0;
@@ -114,14 +116,8 @@ public class KNNPredictor extends Predictor {
 				return a[0].compareTo(b[0]);
 			}
 		});
-	
-
-		System.out.println(arr[0][0] + "  " + arr[0][1]);
-		System.out.println(arr[1][0] + "  " + arr[1][1]);
-		System.out.println(arr[2][0] + "  " + arr[2][1]);
-		System.out.println(arr[3][0] + "  " + arr[3][1]);
-		System.out.println(arr[4][0] + "  " + arr[4][1]);
-		System.out.println();
+		
+		
 		for (int i = 0; i<k; i++) {
 			if (arr[i][1] == 1) {
 				survived++;
@@ -138,6 +134,7 @@ public class KNNPredictor extends Predictor {
 			return "0";
 		}
 	}
+	
 	public Double getAccuracy(ArrayList<DataPoint> data) {
 		double truePositive = 0.0;
 		double falsePositive = 0.0;
@@ -162,7 +159,7 @@ public class KNNPredictor extends Predictor {
 			}
 		}
 		double result = (truePositive + trueNegative) / (truePositive + trueNegative + falsePositive + falseNegative);
-		return result;
+		return result*100;
 	}
 	
 	public Double getPrecision(ArrayList<DataPoint> data) {
@@ -189,9 +186,9 @@ public class KNNPredictor extends Predictor {
 				}
 			}
 		}
-		System.out.println();
+		
 		double precisionResult = (truePositive) / (truePositive + falseNegative);
-		return precisionResult;
+		return precisionResult*100;
 	}
 	static ArrayList<DataPoint> finalArray = new ArrayList<DataPoint>();
 	public static void main(String[] args) throws FileNotFoundException {
@@ -215,9 +212,22 @@ public class KNNPredictor extends Predictor {
 				}
 			}
 			//getting accuracy
-			System.out.println("accuracy: " + predictor.getAccuracy(finalArray));
+			double accuracy = predictor.getAccuracy(finalArray);
+			
 			//getting precision
-			System.out.println("precision: " + predictor.getPrecision(finalArray));
+			double precision = predictor.getPrecision(finalArray);
+			
+			JFrame myFrame = new JFrame();
+			Container contentPane = myFrame.getContentPane();
+			contentPane.setLayout(new FlowLayout());
+			
+			contentPane.add(new JButton(String.format("%.2f", accuracy)));
+			contentPane.add(new JButton(String.format("%.2f", precision)));
+			
+			myFrame.pack();
+			myFrame.setVisible(true);
+	    	myFrame.setTitle("Accuracy and Precision");
+			
 		}
 	}
 	
