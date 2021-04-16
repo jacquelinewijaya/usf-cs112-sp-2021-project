@@ -1,8 +1,8 @@
 package datanalytics;
 
 public class DataPoint {
-	public Double f1;
-	public Double f2;
+	public double f1;
+	public double f2;
 	public String label;
 	public Boolean isTest;
 	
@@ -13,17 +13,17 @@ public class DataPoint {
 		this.isTest = false;
 	}
 	
-	public DataPoint (Double f1, Double f2, String label, Boolean isTest) {
+	public DataPoint (double f1, double f2, String label, Boolean isTest) {
 		this.f1 = f1;
 		this.f2 = f2;
 		this.label = label;
 		this.isTest = isTest;
 	}
 	
-	public Double getF1() {
+	public double getF1() {
 		return this.f1;
 	}
-	public Double getF2() {
+	public double getF2() {
 		return this.f2;
 	}
 	public String getLabel() {
@@ -33,10 +33,10 @@ public class DataPoint {
 		return this.isTest;
 	}
 	
-	public void setF1(Double f1Num) {
+	public void setF1(double f1Num) {
 		this.f1 = f1Num;
 	}
-	public void setF2(Double f2Num) {
+	public void setF2(double f2Num) {
 		this.f2 = f2Num;
 	}
 	public void setLabel(String label) {
@@ -47,6 +47,9 @@ public class DataPoint {
 	}
 	public void setIsTest(boolean testParam) {
 		this.isTest = testParam;
+	}
+	public String toString() {
+		return "age: " + this.f1 + " fare: " +this.f2 + " survival: " +this.label + " type: " + this.isTest;
 	}
 	
 }
