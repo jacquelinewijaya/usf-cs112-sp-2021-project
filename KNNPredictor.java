@@ -241,7 +241,11 @@ public class KNNPredictor extends Predictor {
 			
 			myFrame.pack();
 			myFrame.setVisible(true);
+<<<<<<< HEAD
 	    	myFrame.setTitle("Accuracy and Precision");*/
+=======
+	    		myFrame.setTitle("Accuracy and Precision");
+>>>>>>> 2a6dbddd6ac87322cd16181df9ab02b2acb95f6b
 			
 		}
 	}
