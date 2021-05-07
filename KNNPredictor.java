@@ -16,7 +16,8 @@ public class KNNPredictor extends Predictor {
 	private int K;
 	private int survivedPassengers = 0;
 	private int diedPassengers = 0;
-	static ArrayList<DataPoint> trainLabels = new ArrayList<DataPoint>();
+	//static ArrayList<DataPoint> trainLabels = new ArrayList<DataPoint>();
+	static ArrayList<DataPoint> finalArray = new ArrayList<DataPoint>();
 	
 	public KNNPredictor(int val) {
 		this.K = val;
@@ -26,12 +27,28 @@ public class KNNPredictor extends Predictor {
 	}
 	
 	public ArrayList readData(String filename) {
+		Scanner scanner = null;
+		try {
+			scanner = new Scanner(new File(filename));
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		scanner.nextLine();
+		String records = "" ;
+		while(scanner.hasNextLine()) {
+			String record = scanner.nextLine() + ",";
+			records += record;
+				
+		}			
+		
 		int testentry = 0;
 		int trainentry = 0;
 		ArrayList<DataPoint> dataPoint = new ArrayList<DataPoint>();
 		DataPoint d = new DataPoint();
 		
-		Scanner data = new Scanner(filename);
+		//reading from file
+		Scanner data = new Scanner(records);
 		
 		data.useDelimiter(",");
 		while (data.hasNext()) {
@@ -43,11 +60,9 @@ public class KNNPredictor extends Predictor {
 			String firstName = data.next();
 			fullName = firstName.substring(1, firstName.length()-1) + " " + lastName.substring(1);
 			
-			
 			String gender = data.next();
 			String stringAge = data.next();
 			String stringFare = data.next();
-			
 			
 			if (!stringFare.equals("") && !stringAge.equals("")) { //if age and fare are valid numbers
 				double age = d.getF1();
@@ -96,9 +111,9 @@ public class KNNPredictor extends Predictor {
 		return Math.sqrt(((x2-x1) * (x2-x1)) + ((y2-y1) * (y2-y1)));
 		
 	}
-	public String test(DataPoint data) {
+	public String test(DataPoint data, ArrayList<DataPoint> trainLabels) {
 		double distance;
-		int k = 3;
+		int k = 5;
 		int survived = 0;
 		int died = 0;
 		int count = 0;
@@ -117,7 +132,6 @@ public class KNNPredictor extends Predictor {
 			}
 		});
 		
-		
 		for (int i = 0; i<k; i++) {
 			if (arr[i][1] == 1) {
 				survived++;
@@ -135,7 +149,8 @@ public class KNNPredictor extends Predictor {
 		}
 	}
 	
-	public Double getAccuracy(ArrayList<DataPoint> data) {
+	public Double getAccuracy(ArrayList<DataPoint> data, ArrayList<DataPoint> trainLabels) {
+		
 		double truePositive = 0.0;
 		double falsePositive = 0.0;
 		double trueNegative = 0.0;
@@ -143,7 +158,7 @@ public class KNNPredictor extends Predictor {
 		
 		for (DataPoint d : data) {
 			if (d.isTest = true) {
-				String label = test(d);
+				String label = test(d,trainLabels);
 				if (label.equals("1") && d.label.equals("1.0")) {
 					truePositive++;
 				}
@@ -162,15 +177,15 @@ public class KNNPredictor extends Predictor {
 		return result*100;
 	}
 	
-	public Double getPrecision(ArrayList<DataPoint> data) {
+	public Double getPrecision(ArrayList<DataPoint> data, ArrayList<DataPoint> trainLabels) {
 		double truePositive = 0.0;
 		double falsePositive = 0.0;
 		double trueNegative = 0.0;
 		double falseNegative = 0.0;
 		
 		for (DataPoint d : data) {
-			if (d.isTest == true) {
-				String label = test(d);
+			if (d.isTest = true) {
+				String label = test(d, trainLabels);
 
 				if (label.equals("1") && d.label.equals("1.0")) {
 					truePositive++;
@@ -190,7 +205,7 @@ public class KNNPredictor extends Predictor {
 		double precisionResult = (truePositive) / (truePositive + falseNegative);
 		return precisionResult*100;
 	}
-	static ArrayList<DataPoint> finalArray = new ArrayList<DataPoint>();
+	
 	public static void main(String[] args) throws FileNotFoundException {
 		KNNPredictor predictor = new KNNPredictor();
 		
@@ -206,7 +221,7 @@ public class KNNPredictor extends Predictor {
 			finalArray = predictor.readData(records);
 			
 			//adding to array of train labels
-			for (DataPoint f : finalArray) { 
+			/*for (DataPoint f : finalArray) { 
 				if (f.isTest == false) {
 					trainLabels.add(f);
 				}
@@ -226,7 +241,7 @@ public class KNNPredictor extends Predictor {
 			
 			myFrame.pack();
 			myFrame.setVisible(true);
-	    	myFrame.setTitle("Accuracy and Precision");
+	    	myFrame.setTitle("Accuracy and Precision");*/
 			
 		}
 	}
