@@ -10,12 +10,15 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JSlider;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 
 
-public class Graph extends JPanel {
+public class Graph extends JPanel implements ActionListener {
 
     private static final long serialVersionUID = 1L;
     private int labelPadding = 40;
@@ -71,6 +74,10 @@ public class Graph extends JPanel {
         // TODO: Set this.data as the output of readData
     }
     
+	public Graph() {
+		// TODO Auto-generated constructor stub
+	}
+
 	@Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -231,17 +238,23 @@ public class Graph extends JPanel {
     public List<DataPoint> getData() {
         return data;
     }
-    
+    public void actionPerformed(ActionEvent e) {
+        if ("disable".equals(e.getActionCommand())) {
+           
+            b3.setEnabled(true);
+        } else {
+            b3.setEnabled(false);
+        }
+    }
+    static JSlider b;
+    static JLabel l;
+    static JButton b3;
     /*  Run createAndShowGui in the main method, where we create the frame too and pack it in the panel*/
     private static void createAndShowGui(int K, String fileName) {
     	
         Graph mainPanel = new Graph(K, fileName);
-        mainPanel.addMouseListener(new MouseAdapter() {
-			public void mouseClicked(MouseEvent e) {
-				System.out.println("Mouse was clicked at (" + e.getX() + "," + e.getY() + ")");
-			}
-		});
-        mainPanel.setPreferredSize(new Dimension(700, 800));
+       
+        mainPanel.setPreferredSize(new Dimension(1500, 1500));
         
         JPanel panel1 = new JPanel();
         panel1.add(new JLabel("Accuracy & Precision"));
@@ -251,19 +264,30 @@ public class Graph extends JPanel {
         panel1.add(b1);
         panel1.add(b2);
         
-        
         //creating the frame 
         JFrame frame = new JFrame("CS 112 Project Part 3");
+        
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
        
-       
-		frame.getContentPane().add(BorderLayout.CENTER, mainPanel);
-		frame.getContentPane().add(BorderLayout.NORTH, panel1);
-
+        frame.setPreferredSize(new Dimension(1500, 1500));
+		frame.getContentPane().add( mainPanel);
+		frame.getContentPane().add( panel1);
+		
+		JLabel value = new JLabel("Choose the majority value: ", JLabel.CENTER);
+        frame.add(value);
+        JSlider slider = new JSlider(2,25, 5);
+        slider.setMinorTickSpacing(1);
+        slider.setMajorTickSpacing(5);
+        slider.setPaintTicks(true);
+        frame.add(slider);
+        JButton b3 = new JButton("Run test");
+        frame.add(b3);        
 		
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
+        frame.setLayout(new GridLayout(3, 3));
+        frame.setSize(1200, 1200);
         
         
         System.out.println(mainPanel.accuracy);
